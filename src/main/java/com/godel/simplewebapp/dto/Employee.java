@@ -1,6 +1,7 @@
 package com.godel.simplewebapp.dto;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Employee {
 
@@ -97,5 +98,24 @@ public class Employee {
                 ", jobTitle='" + jobTitle + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return Objects.equals(employeeId, employee.employeeId) &&
+                Objects.equals(firstName, employee.firstName) &&
+                Objects.equals(lastName, employee.lastName) &&
+                Objects.equals(departmentId, employee.departmentId) &&
+                Objects.equals(jobTitle, employee.jobTitle) &&
+                gender == employee.gender &&
+                Objects.equals(dateOfBirth, employee.dateOfBirth);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(employeeId, firstName, lastName, departmentId, jobTitle, gender, dateOfBirth);
     }
 }
