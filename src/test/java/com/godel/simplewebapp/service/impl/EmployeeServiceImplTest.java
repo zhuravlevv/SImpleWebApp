@@ -3,14 +3,12 @@ package com.godel.simplewebapp.service.impl;
 import com.godel.simplewebapp.dao.EmployeeDao;
 import com.godel.simplewebapp.dto.Employee;
 import com.godel.simplewebapp.dto.Gender;
-import com.godel.simplewebapp.service.EmployeeService;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,15 +18,18 @@ import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
 public class EmployeeServiceImplTest {
 
-    @Autowired
-    private EmployeeService employeeService;
+    @InjectMocks
+    private EmployeeServiceImpl employeeService;
 
-    @MockBean
+    @Mock
     private EmployeeDao employeeDao;
+
+    @Before
+    public void initMocks(){
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     public void shouldReturnAllEmployees(){
