@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("e")
+@RequestMapping("employee")
 public class EmployeeController {
 
     @NonNull
