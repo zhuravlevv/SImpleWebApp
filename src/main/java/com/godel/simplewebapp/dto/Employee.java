@@ -1,22 +1,33 @@
 package com.godel.simplewebapp.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 import java.util.Objects;
 
+@ApiModel(value = "Employee")
 public class Employee {
 
+    @ApiModelProperty(value = "employee id", example = "1")
     private Integer employeeId;
 
+    @ApiModelProperty(value = "employee first name", example = "Ivan")
     private String firstName;
 
+    @ApiModelProperty(value = "employee last name", example = "Ivanov")
     private String lastName;
 
+    @ApiModelProperty(value = "department id", example = "2")
     private Integer departmentId;
 
+    @ApiModelProperty(value = "job title", example = "Some title")
     private String jobTitle;
 
+    @ApiModelProperty(value = "gender", example = "MALE")
     private Gender gender;
 
+    @ApiModelProperty(value = "date of birth", example = "12-03-1994")
     private Date dateOfBirth;
 
     public Employee() {
