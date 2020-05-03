@@ -7,12 +7,12 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -20,6 +20,7 @@ import java.util.List;
 @Api(tags = "Employee ", description = "Employee Management System ")
 @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Success "),
+        @ApiResponse(code = 400, message = "Bad request "),
         @ApiResponse(code = 404, message = "The resource you were trying to reach is not found ")
 })
 public class EmployeeController {
@@ -37,32 +38,65 @@ public class EmployeeController {
     @ApiOperation(value = "View a list of employees ")
     @GetMapping
     public ResponseEntity<List<Employee>> getAll(){
-        return ResponseEntity.ok(employeeService.getAll());
+        List<Employee> employees = employeeService.getAll();
+        if(employees.isEmpty()){
+            return ResponseEntity.notFound()
+                    .build();
+        }
+        return ResponseEntity.ok(employees);
     }
 
     @ApiOperation(value = "Get an employee by id")
     @GetMapping("/{id}")
     public ResponseEntity<Employee> getById(@PathVariable("id") Integer id){
-        return ResponseEntity.ok(employeeService.getById(id));
+        if(id == null){
+            return ResponseEntity.notFound()
+                    .build();
+        }
+        Employee employee = employeeService.getById(id);
+        if(employee == null){
+            return ResponseEntity.notFound()
+                    .build();
+        }
+        return ResponseEntity.ok(employee);
     }
 
     @ApiOperation(value = "Add an employee ")
     @PostMapping
     public ResponseEntity<Employee> addEmployee(@Valid @RequestBody Employee employee){
-        return ResponseEntity.ok(employeeService.add(employee));
+        if(employee == null){
+            return ResponseEntity.badRequest()
+                    .body(null);
+        }
+        Employee createdEmployee = employeeService.add(employee);
+        return ResponseEntity.created(URI.create("employee/" + createdEmployee.getEmployeeId()))
+                .body(createdEmployee);
     }
 
     @ApiOperation(value = "Update an employee by id")
     @PutMapping("/{id}")
     public ResponseEntity<Employee> update(@PathVariable("id") Integer id, @RequestBody Employee employee){
+        if(id == null){
+            return ResponseEntity.notFound()
+                    .build();
+        }
+        if(employee == null){
+            return ResponseEntity.badRequest()
+                    .body(null);
+        }
         return ResponseEntity.ok(employeeService.update(id, employee));
     }
 
     @ApiOperation(value = "Delete an employee by id")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id){
+        if(id == null){
+            return ResponseEntity.notFound()
+                    .build();
+        }
         employeeService.deleteById(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent()
+                .build();
     }
 
 }
