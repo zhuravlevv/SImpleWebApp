@@ -75,7 +75,7 @@ public class EmployeeController {
 
     @ApiOperation(value = "Update an employee by id")
     @PutMapping("/{id}")
-    public ResponseEntity<Employee> update(@PathVariable("id") Integer id, @RequestBody Employee employee){
+    public ResponseEntity<Employee> update(@PathVariable("id") Integer id,@Valid @RequestBody Employee employee){
         if(id == null){
             return ResponseEntity.notFound()
                     .build();

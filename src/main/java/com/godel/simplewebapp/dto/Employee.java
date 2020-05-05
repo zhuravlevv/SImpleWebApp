@@ -3,6 +3,10 @@ package com.godel.simplewebapp.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.Objects;
 
@@ -13,21 +17,31 @@ public class Employee {
     private Integer employeeId;
 
     @ApiModelProperty(value = "Employee first name", example = "Ivan")
+    @NotNull(message = "First name must be not null")
+    @Size(min = 1, message = "First name size must be greater than 1")
     private String firstName;
 
     @ApiModelProperty(value = "Employee last name", example = "Ivanov")
+    @NotNull(message = "Last name must be not null")
+    @Size(min = 1, message = "Last name size must be greater than 1")
     private String lastName;
 
     @ApiModelProperty(value = "Department id", example = "2")
+    @NotNull(message = "Department id must be not null")
+    @Min(1)
     private Integer departmentId;
 
     @ApiModelProperty(value = "Job title", example = "Some title")
+    @NotNull(message = "Job title must be not null")
+    @Size(min = 3, max = 30, message = "Job title size must be between 3 and 30")
     private String jobTitle;
 
     @ApiModelProperty(value = "Gender", example = "MALE")
+    @NotNull(message = "Gender must be not null")
     private Gender gender;
 
     @ApiModelProperty(value = "Date of birth", example = "12-03-1994")
+    @NotNull(message = "Date of birth must be not null")
     private Date dateOfBirth;
 
     public Employee() {
