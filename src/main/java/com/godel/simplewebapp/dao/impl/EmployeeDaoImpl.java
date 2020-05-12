@@ -3,6 +3,8 @@ package com.godel.simplewebapp.dao.impl;
 import com.godel.simplewebapp.dao.EmployeeDao;
 import com.godel.simplewebapp.dto.Employee;
 import com.godel.simplewebapp.dto.Gender;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.RowMapper;
@@ -36,6 +38,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Value("${employee.delete}")
     private String DELETE;
 
+    private static final Logger LOGGER = LogManager.getLogger(EmployeeDaoImpl.class);
+
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Autowired
@@ -45,12 +49,14 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public List<Employee> getAll() {
+        LOGGER.debug("Get all employees");
         return namedParameterJdbcTemplate
                 .query(SELECT_ALL, new EmployeeRowMapper());
     }
 
     @Override
     public Employee getById(Integer employeeId) {
+        LOGGER.debug("Get employee with id = {}", employeeId);
         SqlParameterSource params = new MapSqlParameterSource().addValue("employeeId", employeeId);
         return namedParameterJdbcTemplate
                 .queryForObject(SELECT_BY_ID, params, new EmployeeRowMapper());
@@ -58,12 +64,14 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public void deleteById(Integer employeeId) {
+        LOGGER.debug("Delete employee with id {}", employeeId);
         SqlParameterSource params = new MapSqlParameterSource().addValue("employeeId", employeeId);
         namedParameterJdbcTemplate.update(DELETE, params);
     }
 
     @Override
     public Employee add(Employee employee) {
+        LOGGER.debug("Add employee {}", employee);
         MapSqlParameterSource params = new MapSqlParameterSource();
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -82,6 +90,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public Employee update(Employee employee) {
+        LOGGER.debug("Update employee with id {} {}", employee.getEmployeeId(), employee);
         MapSqlParameterSource params = new MapSqlParameterSource();
 
         params.addValue("employeeId", employee.getEmployeeId())

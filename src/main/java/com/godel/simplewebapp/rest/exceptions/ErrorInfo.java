@@ -39,4 +39,13 @@ public class ErrorInfo {
     public void setDebugMessage(String debugMessage) {
         this.debugMessage = debugMessage;
     }
+
+    @Override
+    public String toString() {
+        return "ErrorInfo{" +
+                "status=" + status +
+                ", message='" + message + '\'' +
+                ", debugMessage='" + debugMessage + '\'' +
+                '}';
+    }
 }

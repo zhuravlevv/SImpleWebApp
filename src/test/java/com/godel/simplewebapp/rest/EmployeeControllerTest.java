@@ -82,11 +82,10 @@ public class EmployeeControllerTest {
 
     @Test
     public void update() throws Exception {
-        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, new Date());
-        employee.setDateOfBirth(null);
+        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, new Date(1577836800000L));
         employee.setEmployeeId(1);
 
-        String employeeJson = "{\"employeeId\":\"1\",\"firstName\":\"first_name\",\"lastName\":\"last_name\",\"departmentId\":\"1\",\"jobTitle\":\"job_title\",\"gender\":\"MALE\",\"dateOfBirth\":\"null\"}";
+        String employeeJson = "{\"employeeId\":\"1\",\"firstName\":\"first_name\",\"lastName\":\"last_name\",\"departmentId\":\"1\",\"jobTitle\":\"job_title\",\"gender\":\"MALE\",\"dateOfBirth\":\"2020-01-01\"}";
 
         when(employeeService.update(any(Integer.class), any(Employee.class))).thenReturn(employee);
 
@@ -98,7 +97,7 @@ public class EmployeeControllerTest {
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         System.out.println(result.getResponse());
 
-        String expected = "{employeeId:1,firstName:first_name,lastName:last_name,departmentId:1,jobTitle:job_title,gender:MALE,dateOfBirth:null}";
+        String expected = "{employeeId:1,firstName:first_name,lastName:last_name,departmentId:1,jobTitle:job_title,gender:MALE,dateOfBirth:\"2020-01-01T00:00:00.000+0000\"}";
 
         JSONAssert.assertEquals(expected, result.getResponse()
                 .getContentAsString(), false);
@@ -106,11 +105,10 @@ public class EmployeeControllerTest {
 
     @Test
     public void add() throws Exception {
-        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, new Date());
-        employee.setDateOfBirth(null);
+        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, new Date(1577836800000L));
         employee.setEmployeeId(1);
 
-        String employeeJson = "{\"employeeId\":\"1\",\"firstName\":\"first_name\",\"lastName\":\"last_name\",\"departmentId\":\"1\",\"jobTitle\":\"job_title\",\"gender\":\"MALE\",\"dateOfBirth\":\"null\"}";
+        String employeeJson = "{\"employeeId\":\"1\",\"firstName\":\"first_name\",\"lastName\":\"last_name\",\"departmentId\":\"1\",\"jobTitle\":\"job_title\",\"gender\":\"MALE\",\"dateOfBirth\":\"2020-01-01\"}";
 
         when(employeeService.add(any(Employee.class))).thenReturn(employee);
 
@@ -122,7 +120,7 @@ public class EmployeeControllerTest {
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         System.out.println(result.getResponse());
 
-        String expected = "{employeeId:1,firstName:first_name,lastName:last_name,departmentId:1,jobTitle:job_title,gender:MALE,dateOfBirth:null}";
+        String expected = "{employeeId:1,firstName:first_name,lastName:last_name,departmentId:1,jobTitle:job_title,gender:MALE,dateOfBirth:\"2020-01-01T00:00:00.000+0000\"}";
 
         JSONAssert.assertEquals(expected, result.getResponse()
                 .getContentAsString(), false);

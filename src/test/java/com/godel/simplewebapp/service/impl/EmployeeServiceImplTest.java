@@ -56,7 +56,7 @@ public class EmployeeServiceImplTest {
     @Test
     public void shouldAddEmployee() {
         Employee employee = new Employee();
-
+        employee.setDateOfBirth(new Date(120000));
         when(employeeDao.add(any(Employee.class))).then(returnsFirstArg());
         Employee addedEmployee = employeeService.add(employee);
 
@@ -65,7 +65,7 @@ public class EmployeeServiceImplTest {
 
     @Test
     public void shouldUpdateEmployee(){
-        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, new Date());
+        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, new Date(12000));
         Employee oldEmployee = new Employee();
 
         when(employeeDao.getById(1)).thenReturn(oldEmployee);
