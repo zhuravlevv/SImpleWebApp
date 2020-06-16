@@ -1,129 +1,169 @@
 package com.godel.simplewebapp.rest;
 
-import com.godel.simplewebapp.Application;
 import com.godel.simplewebapp.dto.Employee;
 import com.godel.simplewebapp.dto.Gender;
-import com.godel.simplewebapp.rest.EmployeeController;
 import com.godel.simplewebapp.service.EmployeeService;
-import org.junit.Assert;
+import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
-@WebMvcTest(value = EmployeeController.class)
+@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class EmployeeControllerTest {
 
-    @Autowired
-    public MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-    @MockBean
+    @InjectMocks
+    private EmployeeController employeeController;
+
+    @Mock
     public EmployeeService employeeService;
+
+    @Before
+    public void setup(){
+        mockMvc = MockMvcBuilders.standaloneSetup(employeeController)
+                .build();
+    }
 
     @Test
     public void getAll() throws Exception {
-        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, new Date());
+        Date date = null;
+        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, date);
         employee.setEmployeeId(1);
-        employee.setDateOfBirth(null);
         List<Employee> employees = new ArrayList<>();
         employees.add(employee);
-
         when(employeeService.getAll()).thenReturn(employees);
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
-                "/employee").accept(
-                MediaType.APPLICATION_JSON);
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/employee")
+        ).andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].employeeId", Matchers.is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].firstName", Matchers.is("first_name")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].lastName", Matchers.is("last_name")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].departmentId", Matchers.is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].jobTitle", Matchers.is("job_title")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].gender", Matchers.is("MALE")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].dateOfBirth", Matchers.is(date)));
 
-        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-
-        System.out.println(result.getResponse());
-
-        String expected = "[{employeeId:1,firstName:first_name,lastName:last_name,departmentId:1,jobTitle:job_title,gender:MALE,dateOfBirth:null}]";
-        JSONAssert.assertEquals(expected, result.getResponse()
-                .getContentAsString(), false);
     }
 
     @Test
     public void getById() throws Exception {
-        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, new Date());
+        Date date = null;
+        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, date);
         employee.setEmployeeId(1);
-        employee.setDateOfBirth(null);
+        when(employeeService.getById(anyInt())).thenReturn(employee);
 
-        when(employeeService.getById(1)).thenReturn(employee);
-
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
-                "/employee/1").accept(
-                MediaType.APPLICATION_JSON);
-
-        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-
-        String expected = "{employeeId:1,firstName:first_name,lastName:last_name,departmentId:1,jobTitle:job_title,gender:MALE,dateOfBirth:null}";
-        JSONAssert.assertEquals(expected, result.getResponse()
-                .getContentAsString(), false);
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/employee/1")
+        ).andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
+                .andExpect(MockMvcResultMatchers.jsonPath("employeeId", Matchers.is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("firstName", Matchers.is("first_name")))
+                .andExpect(MockMvcResultMatchers.jsonPath("lastName", Matchers.is("last_name")))
+                .andExpect(MockMvcResultMatchers.jsonPath("departmentId", Matchers.is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("jobTitle", Matchers.is("job_title")))
+                .andExpect(MockMvcResultMatchers.jsonPath("gender", Matchers.is("MALE")))
+                .andExpect(MockMvcResultMatchers.jsonPath("dateOfBirth", Matchers.is(date)));
     }
 
     @Test
     public void update() throws Exception {
-        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, new Date(1577836800000L));
+        Date date = new Date(1577836800000L);
+        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, date);
         employee.setEmployeeId(1);
-
-        String employeeJson = "{\"employeeId\":\"1\",\"firstName\":\"first_name\",\"lastName\":\"last_name\",\"departmentId\":\"1\",\"jobTitle\":\"job_title\",\"gender\":\"MALE\",\"dateOfBirth\":\"2020-01-01\"}";
-
         when(employeeService.update(any(Integer.class), any(Employee.class))).thenReturn(employee);
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .put("/employee/1")
-                .accept(MediaType.APPLICATION_JSON).content(employeeJson)
-                .contentType(MediaType.APPLICATION_JSON);
+        String employeeJson = "{\"employeeId\":\"2\",\"firstName\":\"first_name\",\"lastName\":\"last_name\",\"departmentId\":\"1\",\"jobTitle\":\"job_title\",\"gender\":\"MALE\",\"dateOfBirth\":\"2020-01-01\"}";
 
-        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-        System.out.println(result.getResponse());
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.put("/employee/1")
+                                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                        .accept(MediaType.APPLICATION_JSON)
+                                        .characterEncoding("UTF-8")
+                                        .content(employeeJson);
 
-        String expected = "{employeeId:1,firstName:first_name,lastName:last_name,departmentId:1,jobTitle:job_title,gender:MALE,dateOfBirth:\"2020-01-01T00:00:00.000+0000\"}";
-
-        JSONAssert.assertEquals(expected, result.getResponse()
-                .getContentAsString(), false);
+        mockMvc.perform(builder)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
+                .andExpect(MockMvcResultMatchers.jsonPath("employeeId", Matchers.is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("firstName", Matchers.is("first_name")))
+                .andExpect(MockMvcResultMatchers.jsonPath("lastName", Matchers.is("last_name")))
+                .andExpect(MockMvcResultMatchers.jsonPath("departmentId", Matchers.is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("jobTitle", Matchers.is("job_title")))
+                .andExpect(MockMvcResultMatchers.jsonPath("gender", Matchers.is("MALE")))
+                .andExpect(MockMvcResultMatchers.jsonPath("dateOfBirth", Matchers.is(1577836800000L)));
     }
 
     @Test
     public void add() throws Exception {
-        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, new Date(1577836800000L));
+        Date date = new Date(1577836800000L);
+        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, date);
         employee.setEmployeeId(1);
+        when(employeeService.add(any(Employee.class))).thenReturn(employee);
 
         String employeeJson = "{\"employeeId\":\"1\",\"firstName\":\"first_name\",\"lastName\":\"last_name\",\"departmentId\":\"1\",\"jobTitle\":\"job_title\",\"gender\":\"MALE\",\"dateOfBirth\":\"2020-01-01\"}";
 
-        when(employeeService.add(any(Employee.class))).thenReturn(employee);
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.post("/employee")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(employeeJson);
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/employee")
-                .accept(MediaType.APPLICATION_JSON).content(employeeJson)
-                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(builder)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
+                .andExpect(MockMvcResultMatchers.jsonPath("employeeId", Matchers.is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("firstName", Matchers.is("first_name")))
+                .andExpect(MockMvcResultMatchers.jsonPath("lastName", Matchers.is("last_name")))
+                .andExpect(MockMvcResultMatchers.jsonPath("departmentId", Matchers.is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("jobTitle", Matchers.is("job_title")))
+                .andExpect(MockMvcResultMatchers.jsonPath("gender", Matchers.is("MALE")))
+                .andExpect(MockMvcResultMatchers.jsonPath("dateOfBirth", Matchers.is(1577836800000L)));
 
-        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-        System.out.println(result.getResponse());
-
-        String expected = "{employeeId:1,firstName:first_name,lastName:last_name,departmentId:1,jobTitle:job_title,gender:MALE,dateOfBirth:\"2020-01-01T00:00:00.000+0000\"}";
-
-        JSONAssert.assertEquals(expected, result.getResponse()
-                .getContentAsString(), false);
     }
+
+    @Test
+    public void delete() throws Exception {
+
+        MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.delete("/employee/1")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8");
+
+        mockMvc.perform(builder)
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+
+    }
+
 
 }
