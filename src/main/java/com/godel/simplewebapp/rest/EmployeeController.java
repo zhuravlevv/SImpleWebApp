@@ -9,25 +9,24 @@ import io.swagger.annotations.ApiResponses;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.lang.NonNull;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("employee")
 @Api(tags = "Employee ", description = "Employee Management System ")
-@ApiResponses(value = {
+@ApiResponses({
         @ApiResponse(code = 200, message = "Success "),
+        @ApiResponse(code = 201, message = "Created "),
+        @ApiResponse(code = 204, message = "No content "),
         @ApiResponse(code = 400, message = "Bad request "),
         @ApiResponse(code = 404, message = "The resource you were trying to reach is not found ")
 })
 public class EmployeeController {
 
-    @NonNull
     private final EmployeeService employeeService;
 
     private static final Logger LOGGER = LogManager.getLogger(EmployeeController.class);
@@ -37,75 +36,46 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    @ApiResponse(code = 200, message = "Success ",
-            response = Employee.class, responseContainer = "List ")
-    @ApiOperation(value = "View a list of employees ")
+    @ApiOperation("View a list of employees ")
     @GetMapping
-    public ResponseEntity<List<Employee>> getAll(){
+    public List<Employee> getAll(){
         LOGGER.debug("Get all employees");
-        List<Employee> employees = employeeService.getAll();
-        if(employees.isEmpty()){
-            return ResponseEntity.notFound()
-                    .build();
-        }
-        return ResponseEntity.ok(employees);
+
+        return employeeService.getAll();
     }
 
-    @ApiOperation(value = "Get an employee by id")
+    @ApiOperation("Get an employee by id")
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getById(@PathVariable("id") Integer id){
+    public Employee getById(@PathVariable("id") Integer id){
         LOGGER.debug("Get employee with id = {}", id);
-        if(id == null){
-            return ResponseEntity.notFound()
-                    .build();
-        }
-        Employee employee = employeeService.getById(id);
-        if(employee == null){
-            return ResponseEntity.notFound()
-                    .build();
-        }
-        return ResponseEntity.ok(employee);
+
+        return employeeService.getById(id);
     }
 
-    @ApiOperation(value = "Add an employee ")
+    @ApiOperation("Add an employee ")
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ResponseEntity<Employee> addEmployee(@Valid @RequestBody Employee employee){
+    public Employee addEmployee(@Valid @RequestBody Employee employee){
         LOGGER.debug("Add employee {}", employee);
-        if(employee == null){
-            return ResponseEntity.badRequest()
-                    .body(null);
-        }
-        Employee createdEmployee = employeeService.add(employee);
-        return ResponseEntity.created(URI.create("employee/" + createdEmployee.getEmployeeId()))
-                .body(createdEmployee);
+
+        return employeeService.add(employee);
     }
 
-    @ApiOperation(value = "Update an employee by id")
+    @ApiOperation("Update an employee by id")
     @PutMapping("/{id}")
-    public ResponseEntity<Employee> update(@PathVariable("id") Integer id,@Valid @RequestBody Employee employee){
+    public Employee update(@PathVariable("id") Integer id,@Valid @RequestBody Employee employee){
         LOGGER.debug("Update employee with id {} {}", id, employee);
-        if(id == null){
-            return ResponseEntity.notFound()
-                    .build();
-        }
-        if(employee == null){
-            return ResponseEntity.badRequest()
-                    .body(null);
-        }
-        return ResponseEntity.ok(employeeService.update(id, employee));
+
+        return employeeService.update(id, employee);
     }
 
-    @ApiOperation(value = "Delete an employee by id")
+    @ApiOperation("Delete an employee by id")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") Integer id){
+    public void delete(@PathVariable("id") Integer id){
         LOGGER.debug("Delete employee with id {}", id);
-        if(id == null){
-            return ResponseEntity.notFound()
-                    .build();
-        }
+
         employeeService.deleteById(id);
-        return ResponseEntity.noContent()
-                .build();
     }
 
 }
