@@ -2,14 +2,16 @@ package com.godel.simplewebapp.service.impl;
 
 import com.godel.simplewebapp.dao.EmployeeDao;
 import com.godel.simplewebapp.dto.Employee;
+import com.godel.simplewebapp.exceptions.EmployeeServiceException;
+import com.godel.simplewebapp.exceptions.NotFoundEmployeeServiceException;
 import com.godel.simplewebapp.service.EmployeeService;
-import com.godel.simplewebapp.service.exceptions.DateOfBirthException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -25,13 +27,25 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<Employee> getAll() {
         LOGGER.debug("Get all employees");
-        return employeeDao.getAll();
+        List<Employee> employees = StreamSupport
+                .stream(employeeDao.findAll().spliterator(), false)
+                .collect(Collectors.toList());
+
+        if(employees.isEmpty()){
+            throw new EmployeeServiceException(
+                    new NotFoundEmployeeServiceException("Employees not found."));
+        }
+        return employees;
     }
 
     @Override
     public Employee getById(Integer id) {
         LOGGER.debug("Get employee with id = {}", id);
-        return employeeDao.getById(id);
+
+        return employeeDao.findById(id)
+                .orElseThrow( () ->
+                        new EmployeeServiceException(
+                                new NotFoundEmployeeServiceException("Employee with id " + id + " not found")));
     }
 
     @Override
@@ -43,29 +57,24 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee add(Employee employee) {
         LOGGER.debug("Add employee {}", employee);
-        Date dateOfBirth = employee.getDateOfBirth();
-        Date currentDate = new Date();
-        if(dateOfBirth.compareTo(currentDate) >= 0){
-            throw new DateOfBirthException(dateOfBirth.toString());
-        }
-        return employeeDao.add(employee);
+
+        return employeeDao.save(employee);
     }
 
     @Override
     public Employee update(Integer id, Employee employee) {
         LOGGER.debug("Update employee with id {} {}", id, employee);
-        Date dateOfBirth = employee.getDateOfBirth();
-        Date currentDate = new Date();
-        if(dateOfBirth.compareTo(currentDate) >= 0){
-            throw new DateOfBirthException(dateOfBirth.toString());
-        }
-        Employee currentEmployee = employeeDao.getById(id);
+        Employee currentEmployee = employeeDao.findById(id)
+                .orElseThrow( () ->
+                        new EmployeeServiceException(
+                                new NotFoundEmployeeServiceException("Employee with id " + id + " not found")));
         currentEmployee.setFirstName(employee.getFirstName());
         currentEmployee.setLastName(employee.getLastName());
         currentEmployee.setDepartmentId(employee.getDepartmentId());
         currentEmployee.setJobTitle(employee.getJobTitle());
         currentEmployee.setDateOfBirth(employee.getDateOfBirth());
-        return employeeDao.update(currentEmployee);
+
+        return employeeDao.save(currentEmployee);
     }
 
 }

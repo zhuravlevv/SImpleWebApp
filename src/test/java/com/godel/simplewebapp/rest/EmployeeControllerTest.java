@@ -20,9 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -48,8 +46,8 @@ public class EmployeeControllerTest {
 
     @Test
     public void getAll() throws Exception {
-        Date date = null;
-        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, date);
+        Calendar calendar = new GregorianCalendar(2020, 01, 01);
+        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, calendar);
         employee.setEmployeeId(1);
         List<Employee> employees = new ArrayList<>();
         employees.add(employee);
@@ -66,14 +64,14 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].departmentId", Matchers.is(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].jobTitle", Matchers.is("job_title")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].gender", Matchers.is("MALE")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].dateOfBirth", Matchers.is(date)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].dateOfBirth", Matchers.is(1580504400000L)));
 
     }
 
     @Test
     public void getById() throws Exception {
-        Date date = null;
-        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, date);
+        Calendar calendar = new GregorianCalendar(2020, 01, 01);
+        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, calendar);
         employee.setEmployeeId(1);
         when(employeeService.getById(anyInt())).thenReturn(employee);
 
@@ -88,13 +86,13 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("departmentId", Matchers.is(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("jobTitle", Matchers.is("job_title")))
                 .andExpect(MockMvcResultMatchers.jsonPath("gender", Matchers.is("MALE")))
-                .andExpect(MockMvcResultMatchers.jsonPath("dateOfBirth", Matchers.is(date)));
+                .andExpect(MockMvcResultMatchers.jsonPath("dateOfBirth", Matchers.is(1580504400000L)));
     }
 
     @Test
     public void update() throws Exception {
-        Date date = new Date(1577836800000L);
-        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, date);
+        Calendar calendar = new GregorianCalendar(2020, 01, 01);
+        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, calendar);
         employee.setEmployeeId(1);
         when(employeeService.update(any(Integer.class), any(Employee.class))).thenReturn(employee);
 
@@ -117,13 +115,13 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("departmentId", Matchers.is(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("jobTitle", Matchers.is("job_title")))
                 .andExpect(MockMvcResultMatchers.jsonPath("gender", Matchers.is("MALE")))
-                .andExpect(MockMvcResultMatchers.jsonPath("dateOfBirth", Matchers.is(1577836800000L)));
+                .andExpect(MockMvcResultMatchers.jsonPath("dateOfBirth", Matchers.is(1580504400000L)));
     }
 
     @Test
     public void add() throws Exception {
-        Date date = new Date(1577836800000L);
-        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, date);
+        Calendar calendar = new GregorianCalendar(2020, 01, 01);
+        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, calendar);
         employee.setEmployeeId(1);
         when(employeeService.add(any(Employee.class))).thenReturn(employee);
 
@@ -146,7 +144,7 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("departmentId", Matchers.is(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("jobTitle", Matchers.is("job_title")))
                 .andExpect(MockMvcResultMatchers.jsonPath("gender", Matchers.is("MALE")))
-                .andExpect(MockMvcResultMatchers.jsonPath("dateOfBirth", Matchers.is(1577836800000L)));
+                .andExpect(MockMvcResultMatchers.jsonPath("dateOfBirth", Matchers.is(1580504400000L)));
 
     }
 

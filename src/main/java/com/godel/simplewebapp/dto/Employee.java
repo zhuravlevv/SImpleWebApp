@@ -3,27 +3,32 @@ package com.godel.simplewebapp.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.Max;
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Objects;
 
 @ApiModel(value = "Employee ")
+@Entity
+@Table(name = "employee")
 public class Employee {
 
     @ApiModelProperty(value = "Employee id", example = "1")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer employeeId;
 
     @ApiModelProperty(value = "Employee first name", example = "Ivan")
     @NotNull(message = "First name must be not null")
-    @Size(min = 1, message = "First name size must be greater than 1")
+    @Size(min = 1, message = "First name size must be greater or equal 1")
     private String firstName;
 
     @ApiModelProperty(value = "Employee last name", example = "Ivanov")
     @NotNull(message = "Last name must be not null")
-    @Size(min = 1, message = "Last name size must be greater than 1")
+    @Size(min = 1, message = "Last name size must be greater or equal 1")
     private String lastName;
 
     @ApiModelProperty(value = "Department id", example = "2")
@@ -38,16 +43,20 @@ public class Employee {
 
     @ApiModelProperty(value = "Gender", example = "MALE")
     @NotNull(message = "Gender must be not null")
+    @Enumerated
     private Gender gender;
 
-    @ApiModelProperty(value = "Date of birth", example = "12-03-1994")
+    @ApiModelProperty(value = "Date of birth", example = "1994-12-03")
     @NotNull(message = "Date of birth must be not null")
-    private Date dateOfBirth;
+    @Past(message = "Employee can't be born in the future")
+    @Temporal(TemporalType.DATE)
+    private Calendar dateOfBirth;
 
     public Employee() {
     }
 
-    public Employee(String firstName, String lastName, Integer departmentId, String jobTitle, Gender gender, Date dateOfBirth) {
+
+    public Employee(@NotNull(message = "First name must be not null") @Size(min = 1, message = "First name size must be greater or equal 1") String firstName, @NotNull(message = "Last name must be not null") @Size(min = 1, message = "Last name size must be greater or equal 1") String lastName, @NotNull(message = "Department id must be not null") @Min(1) Integer departmentId, @NotNull(message = "Job title must be not null") @Size(min = 3, max = 30, message = "Job title size must be between 3 and 30") String jobTitle, @NotNull(message = "Gender must be not null") Gender gender, @NotNull(message = "Date of birth must be not null") @Past(message = "Employee can't be born in the future") Calendar dateOfBirth) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.departmentId = departmentId;
@@ -55,7 +64,6 @@ public class Employee {
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
     }
-
 
     public Integer getEmployeeId() {
         return employeeId;
@@ -105,11 +113,11 @@ public class Employee {
         this.gender = gender;
     }
 
-    public Date getDateOfBirth() {
+    public Calendar getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(Calendar dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

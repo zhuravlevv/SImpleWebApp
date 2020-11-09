@@ -10,9 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
@@ -33,11 +31,11 @@ public class EmployeeServiceImplTest {
 
     @Test
     public void shouldReturnAllEmployees(){
-        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, new Date());
+        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, new GregorianCalendar());
         List<Employee> employees = new ArrayList<>();
         employees.add(employee);
 
-        when(employeeDao.getAll()).thenReturn(employees);
+        when(employeeDao.findAll()).thenReturn(employees);
         List<Employee> getAllEmployees = employeeService.getAll();
 
         Assert.assertEquals(1, getAllEmployees.size());
@@ -45,9 +43,9 @@ public class EmployeeServiceImplTest {
 
     @Test
     public void shouldReturnEmployeeById(){
-        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, new Date());
+        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, new GregorianCalendar());
 
-        when(employeeDao.getById(1)).thenReturn(employee);
+        when(employeeDao.findById(1)).thenReturn(Optional.of(employee));
         Employee returnedEmployee = employeeService.getById(1);
 
         Assert.assertEquals(employee, returnedEmployee);
@@ -56,8 +54,8 @@ public class EmployeeServiceImplTest {
     @Test
     public void shouldAddEmployee() {
         Employee employee = new Employee();
-        employee.setDateOfBirth(new Date(120000));
-        when(employeeDao.add(any(Employee.class))).then(returnsFirstArg());
+        employee.setDateOfBirth(new GregorianCalendar());
+        when(employeeDao.save(any(Employee.class))).then(returnsFirstArg());
         Employee addedEmployee = employeeService.add(employee);
 
         Assert.assertEquals(employee, addedEmployee);
@@ -65,11 +63,11 @@ public class EmployeeServiceImplTest {
 
     @Test
     public void shouldUpdateEmployee(){
-        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, new Date(12000));
+        Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, new GregorianCalendar());
         Employee oldEmployee = new Employee();
 
-        when(employeeDao.getById(1)).thenReturn(oldEmployee);
-        when(employeeDao.update(any(Employee.class))).then(returnsFirstArg());
+        when(employeeDao.findById(1)).thenReturn(Optional.of(oldEmployee));
+        when(employeeDao.save(any(Employee.class))).then(returnsFirstArg());
         Employee addedEmployee = employeeService.update(1, employee);
 
         Assert.assertEquals(oldEmployee, addedEmployee);
