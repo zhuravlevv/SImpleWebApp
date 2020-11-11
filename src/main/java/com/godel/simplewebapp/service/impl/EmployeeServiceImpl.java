@@ -5,8 +5,9 @@ import com.godel.simplewebapp.dto.Employee;
 import com.godel.simplewebapp.exceptions.EmployeeServiceException;
 import com.godel.simplewebapp.exceptions.NotFoundEmployeeServiceException;
 import com.godel.simplewebapp.service.EmployeeService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeDao employeeDao;
 
-    private final static Logger LOGGER = LogManager.getLogger(EmployeeServiceImpl.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(EmployeeServiceImpl.class);
 
     public EmployeeServiceImpl(EmployeeDao employeeDao) {
         this.employeeDao = employeeDao;

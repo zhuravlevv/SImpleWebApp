@@ -1,8 +1,6 @@
 package com.godel.simplewebapp.rest.exceptions;
 
 import com.godel.simplewebapp.exceptions.EmployeeServiceException;
-import org.apache.logging.log4j.LogManager;
-//import org.apache.logging.log4j.Logger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
