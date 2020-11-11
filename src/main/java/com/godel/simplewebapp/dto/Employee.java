@@ -16,37 +16,37 @@ import java.util.Objects;
 @Table(name = "employee")
 public class Employee {
 
-    @ApiModelProperty(value = "Employee id", example = "1")
+    @ApiModelProperty(value = "Employee id", example = "1", readOnly = true)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer employeeId;
 
-    @ApiModelProperty(value = "Employee first name", example = "Ivan")
+    @ApiModelProperty(value = "Employee first name", example = "Ivan", required = true)
     @NotNull(message = "First name must be not null")
     @Size(min = 1, message = "First name size must be greater or equal 1")
     private String firstName;
 
-    @ApiModelProperty(value = "Employee last name", example = "Ivanov")
+    @ApiModelProperty(value = "Employee last name", example = "Ivanov", required = true)
     @NotNull(message = "Last name must be not null")
     @Size(min = 1, message = "Last name size must be greater or equal 1")
     private String lastName;
 
-    @ApiModelProperty(value = "Department id", example = "2")
+    @ApiModelProperty(value = "Department id", example = "2", required = true)
     @NotNull(message = "Department id must be not null")
     @Min(1)
     private Integer departmentId;
 
-    @ApiModelProperty(value = "Job title", example = "Some title")
+    @ApiModelProperty(value = "Job title", example = "Some title", required = true)
     @NotNull(message = "Job title must be not null")
     @Size(min = 3, max = 30, message = "Job title size must be between 3 and 30")
     private String jobTitle;
 
-    @ApiModelProperty(value = "Gender", example = "MALE")
+    @ApiModelProperty(value = "Gender", example = "MALE", required = true)
     @NotNull(message = "Gender must be not null")
     @Enumerated
     private Gender gender;
 
-    @ApiModelProperty(value = "Date of birth", example = "1994-12-03")
+    @ApiModelProperty(value = "Date of birth", example = "1994-12-03", dataType = "java.lang.String", required = true)
     @NotNull(message = "Date of birth must be not null")
     @Past(message = "Employee can't be born in the future")
     @Temporal(TemporalType.DATE)
