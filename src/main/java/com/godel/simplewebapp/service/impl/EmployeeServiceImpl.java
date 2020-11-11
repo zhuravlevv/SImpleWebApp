@@ -58,7 +58,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee add(Employee employee) {
         LOGGER.debug("Add employee {}", employee);
-
+        employee.setEmployeeId(null);
         return employeeDao.save(employee);
     }
 
