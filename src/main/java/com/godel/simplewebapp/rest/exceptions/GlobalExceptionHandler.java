@@ -1,9 +1,10 @@
 package com.godel.simplewebapp.rest.exceptions;
 
 import com.godel.simplewebapp.exceptions.EmployeeServiceException;
+import com.godel.simplewebapp.exceptions.NotFoundEmployeeServiceException;
+import org.hibernate.exception.JDBCConnectionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   HttpHeaders headers,
                                                                   HttpStatus status,
                                                                   WebRequest request) {
+        LOGGER.error(String.valueOf(ex), ex);
+
         ErrorInfo errorInfo = new ErrorInfo(status, "Malformed JSON request", ex.getMessage());
-        LOGGER.error(String.valueOf(errorInfo));
         return ResponseEntity
                 .status(status)
                 .body(errorInfo);
@@ -36,18 +38,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   HttpHeaders headers,
                                                                   HttpStatus status,
                                                                   WebRequest request) {
+        LOGGER.error(String.valueOf(ex), ex);
+
         String message = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
         ErrorInfo errorInfo = new ErrorInfo(status, message, ex.getMessage());
-        LOGGER.error(String.valueOf(errorInfo));
         return ResponseEntity
                 .status(status)
                 .body(errorInfo);
     }
 
-    @ExceptionHandler(EmptyResultDataAccessException.class)
-    public ResponseEntity<ErrorInfo> handleEmptyResultDataAccess(Exception ex) {
-        ErrorInfo errorInfo = new ErrorInfo(HttpStatus.NOT_FOUND, "Such employee doesn't exist" ,ex.getMessage());
-        LOGGER.error(String.valueOf(errorInfo));
+    @ExceptionHandler(NotFoundEmployeeServiceException.class)
+    public ResponseEntity<ErrorInfo> handleNotFoundEmployeeServiceException(Exception ex) {
+        LOGGER.error(String.valueOf(ex), ex);
+
+        ErrorInfo errorInfo = new ErrorInfo(HttpStatus.NOT_FOUND, "Not found" ,ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(errorInfo);
@@ -55,10 +59,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EmployeeServiceException.class)
     public ResponseEntity<ErrorInfo> handleEmployeeServiceException(Exception ex){
-        ErrorInfo errorInfo = new ErrorInfo(HttpStatus.NOT_FOUND, ex.getCause().getMessage(), ex.getMessage());
-        LOGGER.error(String.valueOf(errorInfo));
+        LOGGER.error(String.valueOf(ex), ex);
+
+        ErrorInfo errorInfo = new ErrorInfo(HttpStatus.NOT_FOUND, ex.getMessage(), ex.getCause().getMessage());
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
+                .body(errorInfo);
+    }
+
+    @ExceptionHandler(JDBCConnectionException.class)
+    public ResponseEntity<ErrorInfo> handleJDBCConnectionException(Exception ex){
+        LOGGER.error(String.valueOf(ex), ex);
+
+        ErrorInfo errorInfo = new ErrorInfo(HttpStatus.INTERNAL_SERVER_ERROR, "Couldn't connect to database", ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(errorInfo);
     }
 
