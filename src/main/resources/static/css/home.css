@@ -30,3 +30,11 @@
     background: -moz-linear-gradient(top, #2e5764, #1e3d47);
     background: -webkit-gradient(linear,left bottom,left top,color-stop(0, #1e3d47),color-stop(1, #2e5764));
 }
+.error{
+    display: none;
+    margin-left: 10px;
+}
+.error_show{
+    color: red;
+    margin-left: 10px;
+}

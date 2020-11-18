@@ -19,11 +19,8 @@ import java.util.List;
 @RequestMapping("employee")
 @Api(tags = "Employee ", description = "Employee Management System ")
 @ApiResponses({
-        @ApiResponse(code = 200, message = "Success "),
-        @ApiResponse(code = 201, message = "Created "),
-        @ApiResponse(code = 204, message = "No content "),
-        @ApiResponse(code = 400, message = "Bad request "),
-        @ApiResponse(code = 404, message = "The resource you were trying to reach is not found ")
+        @ApiResponse(code = 404, message = "Not found "),
+        @ApiResponse(code = 500, message = "Internal Server Error ")
 })
 public class EmployeeController {
 
@@ -37,6 +34,7 @@ public class EmployeeController {
     }
 
     @ApiOperation("View a list of employees ")
+    @ApiResponse(code = 200, message = "Success ")
     @GetMapping
     public List<Employee> getAll(){
         LOGGER.debug("Get all employees");
@@ -45,6 +43,7 @@ public class EmployeeController {
     }
 
     @ApiOperation("Get an employee by id")
+    @ApiResponse(code = 200, message = "Success ")
     @GetMapping("/{id}")
     public Employee getById(@PathVariable("id") Integer id){
         LOGGER.debug("Get employee with id = {}", id);
@@ -53,6 +52,10 @@ public class EmployeeController {
     }
 
     @ApiOperation("Add an employee ")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Created "),
+            @ApiResponse(code = 404, message = "Bad request "),
+    })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Employee addEmployee(@Valid @RequestBody Employee employee){
@@ -62,6 +65,10 @@ public class EmployeeController {
     }
 
     @ApiOperation("Update an employee by id")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Success "),
+            @ApiResponse(code = 400, message = "Bad request ")
+    })
     @PutMapping("/{id}")
     public Employee update(@PathVariable("id") Integer id,@Valid @RequestBody Employee employee){
         LOGGER.debug("Update employee with id {} {}", id, employee);
@@ -70,6 +77,7 @@ public class EmployeeController {
     }
 
     @ApiOperation("Delete an employee by id")
+    @ApiResponse(code = 204, message = "No content ")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Integer id){

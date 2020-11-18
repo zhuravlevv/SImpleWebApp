@@ -33,7 +33,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                     .stream(employeeDao.findAll().spliterator(), false)
                     .collect(Collectors.toList());
             if(employees.isEmpty()){
-                throw  new NotFoundEmployeeServiceException("Employees not found");
+                throw new NotFoundEmployeeServiceException("Employees not found");
             }
             return employees;
         }

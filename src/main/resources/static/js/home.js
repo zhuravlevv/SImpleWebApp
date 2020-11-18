@@ -19,7 +19,6 @@ $(document).ready(function() {
 
     $(document).delegate('#addNew', 'click', function(event) {
         event.preventDefault();
-
         let firstName = $('#firstName').val();
         let lastName = $('#lastName').val();
         let departmentId = $('#departmentId').val();
@@ -27,28 +26,45 @@ $(document).ready(function() {
         let gender = $('#gender').val();
         let dateOfBirth = $('#dateOfBirth').val();
 
-        $.ajax({
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            url: "http://localhost:8080/employee",
-            data: JSON.stringify({
-                'firstName': firstName,
-                'lastName' : lastName,
-                'departmentId' : departmentId,
-                'jobTitle' : jobTitle,
-                'gender' : gender,
-                'dateOfBirth' : dateOfBirth
-            }),
-            cache: false,
-            success: function(result) {
-                $("#msg").html( "<span style='color: green'>Employee added successfully</span>" );
-                window.setTimeout(function(){location.reload()},2000)
-            },
-            error: function(err) {
-                $("#msg").html( "<span style='color: red'>Error</span>" );
-                window.setTimeout(function(){location.reload()},2000)
-            }
-        });
+        if(firstName==="" || lastName==="" || jobTitle==="" || dateOfBirth===""){
+            $('#department_span').removeClass("error_show").addClass("error");
+            $('#text_span').removeClass("error").addClass("error_show");
+        }
+
+        else if(departmentId<=0){
+            $('#text_span').removeClass("error_show").addClass("error");
+            $('#department_span').removeClass("error").addClass("error_show");
+        }
+        else {
+            $('#text_span').removeClass("error_show").addClass("error");
+            $('#department_span').removeClass("error_show").addClass("error");
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "http://localhost:8080/employee",
+                data: JSON.stringify({
+                    'firstName': firstName,
+                    'lastName': lastName,
+                    'departmentId': departmentId,
+                    'jobTitle': jobTitle,
+                    'gender': gender,
+                    'dateOfBirth': dateOfBirth
+                }),
+                cache: false,
+                success: function (result) {
+                    $("#msg").html("<span style='color: green'>Employee added successfully</span>");
+                    window.setTimeout(function () {
+                        location.reload()
+                    }, 2000)
+                },
+                error: function (err) {
+                    $("#msg").html("<span style='color: red'>Error</span>");
+                    window.setTimeout(function () {
+                        location.reload()
+                    }, 2000)
+                }
+            });
+        }
     });
 
     $(document).delegate('.delete', 'click', function() {
