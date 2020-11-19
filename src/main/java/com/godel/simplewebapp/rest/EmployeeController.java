@@ -54,7 +54,7 @@ public class EmployeeController {
     @ApiOperation("Add an employee ")
     @ApiResponses({
             @ApiResponse(code = 201, message = "Created "),
-            @ApiResponse(code = 404, message = "Bad request "),
+            @ApiResponse(code = 400, message = "Bad request "),
     })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
