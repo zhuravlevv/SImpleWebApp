@@ -16,7 +16,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("employee")
+@RequestMapping("employees")
 @Api(tags = "Employee ", description = "Employee Management System ")
 @ApiResponses({
         @ApiResponse(code = 404, message = "Not found "),

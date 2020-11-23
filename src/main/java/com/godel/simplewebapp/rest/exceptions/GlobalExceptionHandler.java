@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.jms.JmsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -73,6 +74,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         ErrorInfo errorInfo = new ErrorInfo(HttpStatus.INTERNAL_SERVER_ERROR, "Couldn't connect to database", ex.getMessage());
 
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(errorInfo);
+    }
+
+    @ExceptionHandler(JmsException.class)
+    public ResponseEntity<ErrorInfo> handleJmsException(Exception ex){
+        LOGGER.error(String.valueOf(ex), ex);
+        ErrorInfo errorInfo = new ErrorInfo(HttpStatus.INTERNAL_SERVER_ERROR, "Couldn't connect to broker", ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(errorInfo);
