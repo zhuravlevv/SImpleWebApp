@@ -10,7 +10,7 @@
 </head>
 <body>
 
-    <p><a class='btn' href="#add" rel="modal:open">Add New Employee</a></p>
+    <p><a id="hrefAdd" class='btn' href="#add" rel="modal:open">Add New Employee</a></p>
 
     <table border="1" cellspacing="0" cellpadding="5">
         <tr>
@@ -44,6 +44,10 @@
                 <option>MALE</option>
                 <option>FEMALE</option>
             </select>
+            <br>
+            <br>
+            <span class="error" id="text_span">All fields are required</span>
+            <span class="error" id="department_span">Department id must be greater than zero</span>
         </p>
         <p>
             <input type="submit" id="addNew" value="Submit">

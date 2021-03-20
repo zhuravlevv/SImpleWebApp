@@ -1,0 +1,42 @@
+version: '3'
+services:
+  activemq:
+    image: webcenter/activemq:5.14.3
+    container_name: activemq
+    ports:
+      # jms
+      - 61617:61616
+    #volumes: ["activemq-data:/opt/activemq/conf", "activemq-data:/data/activemq", "activemq-data:/var/log/activemq"]
+    environment:
+      ACTIVEMQ_ADMIN_LOGIN: admin
+      ACTIVEMQ_ADMIN_PASSWORD: admin
+  db:
+    image: postgres:10.15-alpine
+    container_name: postgres
+    ports:
+      - 5433:5432
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data/pgdata
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: employee
+      PGDATA: /var/lib/postgresql/data/pgdata
+    restart: always
+  rest:
+    env_file:
+      - rest.env
+    container_name: simplewebapp
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    #restart: always
+    volumes:
+      - ./docker_logs:/home/appuser/logs
+    links:
+      - db
+      - activemq
+    environment:
+      DATABASE_HOST: db
+    ports:
+      - 8080:8080

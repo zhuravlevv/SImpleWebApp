@@ -54,7 +54,7 @@ public class EmployeeControllerTest {
         when(employeeService.getAll()).thenReturn(employees);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/employee")
+                MockMvcRequestBuilders.get("/employees")
         ).andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
@@ -76,7 +76,7 @@ public class EmployeeControllerTest {
         when(employeeService.getById(anyInt())).thenReturn(employee);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/employee/1")
+                MockMvcRequestBuilders.get("/employees/1")
         ).andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json;charset=UTF-8"))
@@ -99,7 +99,7 @@ public class EmployeeControllerTest {
         String employeeJson = "{\"employeeId\":\"2\",\"firstName\":\"first_name\",\"lastName\":\"last_name\",\"departmentId\":\"1\",\"jobTitle\":\"job_title\",\"gender\":\"MALE\",\"dateOfBirth\":\"2020-01-01\"}";
 
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.put("/employee/1")
+                MockMvcRequestBuilders.put("/employees/1")
                                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                                         .accept(MediaType.APPLICATION_JSON)
                                         .characterEncoding("UTF-8")
@@ -128,7 +128,7 @@ public class EmployeeControllerTest {
         String employeeJson = "{\"employeeId\":\"1\",\"firstName\":\"first_name\",\"lastName\":\"last_name\",\"departmentId\":\"1\",\"jobTitle\":\"job_title\",\"gender\":\"MALE\",\"dateOfBirth\":\"2020-01-01\"}";
 
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.post("/employee")
+                MockMvcRequestBuilders.post("/employees")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
@@ -152,7 +152,7 @@ public class EmployeeControllerTest {
     public void delete() throws Exception {
 
         MockHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.delete("/employee/1")
+                MockMvcRequestBuilders.delete("/employees/1")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8");

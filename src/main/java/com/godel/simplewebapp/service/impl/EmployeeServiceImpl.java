@@ -28,6 +28,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<Employee> getAll() {
         LOGGER.debug("Get all employees");
+
         try {
             List<Employee> employees = StreamSupport
                     .stream(employeeDao.findAll().spliterator(), false)
@@ -45,6 +46,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee getById(Integer id) {
         LOGGER.debug("Get employee with id = {}", id);
+
         try {
             return employeeDao.findById(id)
                     .orElseThrow(() ->
@@ -60,6 +62,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         LOGGER.debug("Delete employee with id {}", id);
 
         try {
+            employeeDao.findById(id)
+                    .orElseThrow(() ->
+                            new NotFoundEmployeeServiceException("Employee with id " + id + " not found"));
             employeeDao.deleteById(id);
         }
         catch (DataAccessException e){
@@ -71,6 +76,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee add(Employee employee) {
         LOGGER.debug("Add employee {}", employee);
+
         employee.setEmployeeId(null);
         try {
             return employeeDao.save(employee);
@@ -83,6 +89,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee update(Integer id, Employee employee) {
         LOGGER.debug("Update employee with id {} {}", id, employee);
+
         try {
             Employee currentEmployee = employeeDao.findById(id)
                     .orElseThrow(() ->

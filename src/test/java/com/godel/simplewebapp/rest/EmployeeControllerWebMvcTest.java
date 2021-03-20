@@ -45,7 +45,7 @@ public class EmployeeControllerWebMvcTest {
         when(employeeService.getAll()).thenReturn(employees);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
-                "/employee").accept(
+                "/employees").accept(
                 MediaType.APPLICATION_JSON);
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
@@ -66,7 +66,7 @@ public class EmployeeControllerWebMvcTest {
         when(employeeService.getById(1)).thenReturn(employee);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get(
-                "/employee/1").accept(
+                "/employees/1").accept(
                 MediaType.APPLICATION_JSON);
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
@@ -88,7 +88,7 @@ public class EmployeeControllerWebMvcTest {
         when(employeeService.update(any(Integer.class), any(Employee.class))).thenReturn(employee);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .put("/employee/1")
+                .put("/employees/1")
                 .accept(MediaType.APPLICATION_JSON).content(employeeJson)
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -111,7 +111,7 @@ public class EmployeeControllerWebMvcTest {
         when(employeeService.add(any(Employee.class))).thenReturn(employee);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/employee")
+                .post("/employees")
                 .accept(MediaType.APPLICATION_JSON).content(employeeJson)
                 .contentType(MediaType.APPLICATION_JSON);
 

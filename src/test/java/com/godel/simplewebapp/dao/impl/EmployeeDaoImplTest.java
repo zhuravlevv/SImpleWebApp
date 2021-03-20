@@ -41,7 +41,7 @@ public class EmployeeDaoImplTest {
                         new EmployeeServiceException(
                                 new NotFoundEmployeeServiceException("Employee with id 1 not found")));
 
-        Assert.assertEquals("first_name", employee.getFirstName());
+        Assert.assertEquals("first", employee.getFirstName());
     }
 
     @Test
@@ -52,7 +52,7 @@ public class EmployeeDaoImplTest {
                 .stream(employeeDao.findAll().spliterator(), false)
                 .collect(Collectors.toList());
 
-        Assert.assertEquals(1, employees.size());
+        Assert.assertEquals(2, employees.size());
         Assert.assertEquals(employee, addedEmployee);
     }
 
