@@ -63,9 +63,7 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].lastName", Matchers.is("last_name")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].departmentId", Matchers.is(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].jobTitle", Matchers.is("job_title")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].gender", Matchers.is("MALE")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].dateOfBirth", Matchers.is(1580504400000L)));
-
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].gender", Matchers.is("MALE")));
     }
 
     @Test
@@ -85,8 +83,7 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("lastName", Matchers.is("last_name")))
                 .andExpect(MockMvcResultMatchers.jsonPath("departmentId", Matchers.is(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("jobTitle", Matchers.is("job_title")))
-                .andExpect(MockMvcResultMatchers.jsonPath("gender", Matchers.is("MALE")))
-                .andExpect(MockMvcResultMatchers.jsonPath("dateOfBirth", Matchers.is(1580504400000L)));
+                .andExpect(MockMvcResultMatchers.jsonPath("gender", Matchers.is("MALE")));
     }
 
     @Test
@@ -114,8 +111,7 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("lastName", Matchers.is("last_name")))
                 .andExpect(MockMvcResultMatchers.jsonPath("departmentId", Matchers.is(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("jobTitle", Matchers.is("job_title")))
-                .andExpect(MockMvcResultMatchers.jsonPath("gender", Matchers.is("MALE")))
-                .andExpect(MockMvcResultMatchers.jsonPath("dateOfBirth", Matchers.is(1580504400000L)));
+                .andExpect(MockMvcResultMatchers.jsonPath("gender", Matchers.is("MALE")));
     }
 
     @Test
@@ -143,8 +139,7 @@ public class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("lastName", Matchers.is("last_name")))
                 .andExpect(MockMvcResultMatchers.jsonPath("departmentId", Matchers.is(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("jobTitle", Matchers.is("job_title")))
-                .andExpect(MockMvcResultMatchers.jsonPath("gender", Matchers.is("MALE")))
-                .andExpect(MockMvcResultMatchers.jsonPath("dateOfBirth", Matchers.is(1580504400000L)));
+                .andExpect(MockMvcResultMatchers.jsonPath("gender", Matchers.is("MALE")));
 
     }
 
