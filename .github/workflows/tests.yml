@@ -20,7 +20,7 @@ jobs:
         run: mvn -B test --file pom.xml
   run_console:
     runs-on: ubuntu-latest
-    needs: [run_tests]
+
     steps:
       - name: Run console
         run: echo Console runned succesfully!
