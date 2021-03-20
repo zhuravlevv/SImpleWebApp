@@ -36,7 +36,7 @@ public class EmployeeControllerWebMvcTest {
 
     @Test
     public void getAll() throws Exception {
-        Calendar calendar = new GregorianCalendar(2020, 01, 01);
+        Calendar calendar = null;
         Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, calendar);
         employee.setEmployeeId(1);
         List<Employee> employees = new ArrayList<>();
@@ -52,14 +52,14 @@ public class EmployeeControllerWebMvcTest {
 
         System.out.println(result.getResponse());
 
-        String expected = "[{\"employeeId\":1,\"firstName\":\"first_name\",\"lastName\":\"last_name\",\"departmentId\":1,\"jobTitle\":\"job_title\",\"gender\":\"MALE\",\"dateOfBirth\":\"2020-01-31T21:00:00.000+0000\"}]";
+        String expected = "[{\"employeeId\":1,\"firstName\":\"first_name\",\"lastName\":\"last_name\",\"departmentId\":1,\"jobTitle\":\"job_title\",\"gender\":\"MALE\",\"dateOfBirth\":null}]";
         assertEquals(expected, result.getResponse()
                 .getContentAsString());
     }
 
     @Test
     public void getById() throws Exception {
-        Calendar calendar = new GregorianCalendar(2020, 01, 01);
+        Calendar calendar = null;
         Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, calendar);
         employee.setEmployeeId(1);
 
@@ -71,7 +71,7 @@ public class EmployeeControllerWebMvcTest {
 
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 
-        String expected = "{\"employeeId\":1,\"firstName\":\"first_name\",\"lastName\":\"last_name\",\"departmentId\":1,\"jobTitle\":\"job_title\",\"gender\":\"MALE\",\"dateOfBirth\":\"2020-01-31T21:00:00.000+0000\"}";
+        String expected = "{\"employeeId\":1,\"firstName\":\"first_name\",\"lastName\":\"last_name\",\"departmentId\":1,\"jobTitle\":\"job_title\",\"gender\":\"MALE\",\"dateOfBirth\":null}";
         assertEquals(expected, result.getResponse()
                 .getContentAsString());
     }
@@ -79,7 +79,7 @@ public class EmployeeControllerWebMvcTest {
     @Test
     public void update() throws Exception {
 
-        Calendar calendar = new GregorianCalendar(2020, 01, 01);
+        Calendar calendar = null;
         Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, calendar);
         employee.setEmployeeId(1);
 
@@ -95,14 +95,14 @@ public class EmployeeControllerWebMvcTest {
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         System.out.println(result.getResponse());
 
-        String expected = "{\"employeeId\":1,\"firstName\":\"first_name\",\"lastName\":\"last_name\",\"departmentId\":1,\"jobTitle\":\"job_title\",\"gender\":\"MALE\",\"dateOfBirth\":\"2020-01-31T21:00:00.000+0000\"}";
+        String expected = "{\"employeeId\":1,\"firstName\":\"first_name\",\"lastName\":\"last_name\",\"departmentId\":1,\"jobTitle\":\"job_title\",\"gender\":\"MALE\",\"dateOfBirth\":null}";
         assertEquals(expected, result.getResponse()
                 .getContentAsString());
     }
 
     @Test
     public void add() throws Exception {
-        Calendar calendar = new GregorianCalendar(2020, 01, 01);
+        Calendar calendar = null;
         Employee employee = new Employee("first_name", "last_name", 1, "job_title", Gender.MALE, calendar);
         employee.setEmployeeId(1);
 
@@ -118,7 +118,7 @@ public class EmployeeControllerWebMvcTest {
         MvcResult result = mockMvc.perform(requestBuilder).andReturn();
         System.out.println(result.getResponse());
 
-        String expected = "{\"employeeId\":1,\"firstName\":\"first_name\",\"lastName\":\"last_name\",\"departmentId\":1,\"jobTitle\":\"job_title\",\"gender\":\"MALE\",\"dateOfBirth\":\"2020-01-31T21:00:00.000+0000\"}";
+        String expected = "{\"employeeId\":1,\"firstName\":\"first_name\",\"lastName\":\"last_name\",\"departmentId\":1,\"jobTitle\":\"job_title\",\"gender\":\"MALE\",\"dateOfBirth\":null}";
         assertEquals(expected, result.getResponse()
                 .getContentAsString());
     }
