@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres
+        image: postgre
         env:
           POSTGRES_PASSWORD: 123
           POSTGRES_DB: employee
