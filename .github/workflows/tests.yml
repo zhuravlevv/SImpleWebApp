@@ -3,6 +3,14 @@ on: push
 jobs:
   run_tests:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:10-2.5
+        env:
+          POSTGRES_PASSWORD: 123
+          POSTGRES_DB: employee
+        ports:
+          - 5432:5432
     steps:
       - name: Run tests
         uses: actions/checkout@v1
