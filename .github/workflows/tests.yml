@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgis/postgis:10-2.5
+        image: postgres
         env:
           POSTGRES_PASSWORD: 123
           POSTGRES_DB: employee
